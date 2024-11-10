@@ -4,12 +4,9 @@ import { useState, useEffect, useRef } from 'react'
 
 export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
   const [inputEditTodoText, setEditTodoInputText] = useState("");
+
   const inputElement = useRef(null);
-  useEffect(() => {
-    if (inputElement.current) {
-      inputElement.current.focus();
-    }
-  }, []);
+  
   const onChangeEditTodoFormInputText = e => {
     setEditTodoInputText(e.target.value);
   };
@@ -43,10 +40,19 @@ export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
           isEditing: true
         }
       } else {
-        return todo
+        if (todo.isEditing === true) {
+          return  {
+            ...todo,
+            isEditing: false
+          }
+        } else {
+          return {
+            ...todo
+          }
+        }
       }
     })
-  setTodos(newTodos);
+    setTodos(newTodos);
   }
 
   const updateTodo = (id) => {
@@ -66,46 +72,68 @@ export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
 
   const deleteTodo = id => {
     const targetTodo = todos.find(todo => todo.id === id);
-    if (targetTodo.isComplete === true) {
-       
-    } else {
+    if (targetTodo.isComplete === false) {
       setIncompleteTasksCount((prev) => prev - 1);
     }
-    setTodos(todos.filter((todo) => todo.id !== id));
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
   }
 
   return (
     <>
       {todos.map((todo) => {
         return (
-          <ul>
-            <li key={todo.id}>
+          <ul className="list-none">
+            <li 
+              key={todo.id}
+              className="relative bg-[#f8f9fa] p-4 mb-3 rounded-md transition-all duration-300 hover:bg-[#e9ecef] hover:-translate-y-0.5 hover:shadow-[0_4px_6px_rgba(0,0,0,0.1)]"
+            >
               {todo.isEditing ? (
                 <>
-                  <input
-                    id="todo"
-                    type="text"
-                    defaultValue={todo.text ?? inputEditTodoText}
-                    onChange={onChangeEditTodoFormInputText}
-                    ref={inputElement}
-                    autoFocus={true}
-                  />
-                  <button
-                    onClick={() => updateTodo(todo.id)}>
-                    保存
-                  </button>
+                  <div className="flex items-center">
+                    <input
+                      id="todo"
+                      type="text"
+                      defaultValue={todo.text ?? inputEditTodoText}
+                      onChange={onChangeEditTodoFormInputText}
+                      className="flex-grow px-2 mr-2 border border-[#ced4da] rounded h-9 text-base"
+                    />
+                    <button
+                      onClick={() => updateTodo(todo.id)}
+                      className="px-3 py-2 border-none rounded cursor-pointer text-sm transition-all duration-300 bg-[#28a745] text-white h-9 hover:bg-[#218838]"
+                    >
+                      保存
+                    </button>
+                  </div>
                 </>
               ) : (
                 <>
-                  <input
-                    id="todo"
-                    type="checkbox"
-                    checked={todo.isComplete}
-                    onChange={(e, id) => onChangeIsComplete(e, todo.id)}
-                  />
-                  <label htmlFor="checkbox">{todo.text}</label>
-                  <button onClick={() => editTodo(todo.id)}>編集</button>
-                  <button onClick={() => deleteTodo(todo.id)}>削除</button>
+                  <div className="flex items-center relative">
+                    <input
+                      id="todo"
+                      type="checkbox"
+                      checked={todo.isComplete}
+                      onChange={(e, id) => onChangeIsComplete(e, todo.id)}
+                      className="mr-3 w-[18px] h-[18px] cursor-pointer shrink-0"
+                    />
+                    <label
+                      htmlFor="checkbox"
+                      className="flex items-center text-base text-[#333] cursor-pointer overflow-hidden truncate whitespace-nowrap flex-grow"
+                    >
+                      {todo.text}
+                    </label>
+                    <button
+                      onClick={() => editTodo(todo.id)}
+                      className="px-3 py-2 border-none rounded cursor-pointer text-sm transition-all duration-300 bg-[#ffc107] text-[#333] right-[70px] hover:bg-[#e0a800]"
+                    >
+                      編集
+                    </button>
+                    <button
+                      onClick={() => deleteTodo(todo.id)}
+                      className="px-3 py-2 border-none rounded cursor-pointer text-sm transition-all duration-300 bg-[#dc3545] text-white hover:bg-[#c82333] ml-2"
+                    >
+                      削除
+                    </button>
+                  </div>
                 </>
               )}
             </li>
