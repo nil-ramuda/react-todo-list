@@ -1,89 +1,87 @@
-import '../index.css'
-import { useState, useEffect, useRef } from 'react'
-
+import "../index.css";
+import { useState, useEffect, useRef } from "react";
 
 export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
   const [inputEditTodoText, setEditTodoInputText] = useState("");
 
   const inputElement = useRef(null);
-  
-  const onChangeEditTodoFormInputText = e => {
+
+  const onChangeEditTodoFormInputText = (e) => {
     setEditTodoInputText(e.target.value);
   };
 
   const onChangeIsComplete = (e, id) => {
-    const newTodos = todos.map(todo => {
+    const newTodos = todos.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
-          isComplete: e.target.checked
-        }
+          isComplete: e.target.checked,
+        };
       } else {
-        return todo
+        return todo;
       }
-    })
+    });
 
     if (e.target.checked === true) {
       setIncompleteTasksCount((prev) => prev - 1);
     } else {
       setIncompleteTasksCount((prev) => prev + 1);
     }
-  setTodos(newTodos);
-  }
-  
+    setTodos(newTodos);
+  };
 
   const editTodo = (id) => {
-    const newTodos = todos.map(todo => {
+    const newTodos = todos.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
-          isEditing: true
-        }
+          isEditing: true,
+        };
       } else {
         if (todo.isEditing === true) {
-          return  {
+          return {
             ...todo,
-            isEditing: false
-          }
+            isEditing: false,
+          };
         } else {
           return {
-            ...todo
-          }
+            ...todo,
+          };
         }
       }
-    })
+    });
     setTodos(newTodos);
-  }
+  };
 
   const updateTodo = (id) => {
-    const newTodos = todos.map(todo => {
+    const newTodos = todos.map((todo) => {
       if (todo.id === id) {
         return {
           ...todo,
           text: inputEditTodoText || todo.text,
-          isEditing: false
-        }
+          isEditing: false,
+        };
       } else {
-        return todo
+        return todo;
       }
-    })
+    });
     setTodos(newTodos);
-  }
+  };
 
-  const deleteTodo = id => {
-    const targetTodo = todos.find(todo => todo.id === id);
+  const deleteTodo = (id) => {
+    const targetTodo = todos.find((todo) => todo.id === id);
     if (targetTodo.isComplete === false) {
       setIncompleteTasksCount((prev) => prev - 1);
     }
     setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  }
+  };
 
   return (
     <>
       {todos.map((todo) => {
         return (
           <ul className="list-none">
-            <li 
+            <li
               key={todo.id}
               className="relative bg-[#f8f9fa] p-4 mb-3 rounded-md transition-all duration-300 hover:bg-[#e9ecef] hover:-translate-y-0.5 hover:shadow-[0_4px_6px_rgba(0,0,0,0.1)]"
             >
@@ -138,8 +136,8 @@ export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
               )}
             </li>
           </ul>
-        )
-      })}  
+        );
+      })}
     </>
-  )
-}
+  );
+};

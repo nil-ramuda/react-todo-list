@@ -7,6 +7,6 @@
 }
 
 body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
+  font-family: "Helvetica Neue", Arial, sans-serif;
   @apply bg-gradient-to-br from-[#f5f7fa] to-[#c3cfe2] flex justify-center items-center min-h-screen text-[#333];
 }
