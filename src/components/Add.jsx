@@ -7,6 +7,7 @@ export const Add = ({ todos, setTodos, setIncompleteTasksCount }) => {
     setAddTodoInputText(e.target.value);
 
   const onClickAddTodo = () => {
+    if (!inputAddTodoText) return;
     setTodos([
       ...todos,
       {

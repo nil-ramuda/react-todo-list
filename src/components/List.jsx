@@ -1,10 +1,8 @@
 import "../index.css";
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 
 export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
   const [inputEditTodoText, setEditTodoInputText] = useState("");
-
-  const inputElement = useRef(null);
 
   const onChangeEditTodoFormInputText = (e) => {
     setEditTodoInputText(e.target.value);
@@ -22,7 +20,7 @@ export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
       }
     });
 
-    if (e.target.checked === true) {
+    if (e.target.checked) {
       setIncompleteTasksCount((prev) => prev - 1);
     } else {
       setIncompleteTasksCount((prev) => prev + 1);
@@ -69,6 +67,8 @@ export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
   };
 
   const deleteTodo = (id) => {
+    const canBeDeleted = confirm("本当に削除してよろしいですか？");
+    if (!canBeDeleted) return;
     const targetTodo = todos.find((todo) => todo.id === id);
     if (targetTodo.isComplete === false) {
       setIncompleteTasksCount((prev) => prev - 1);
