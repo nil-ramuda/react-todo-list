@@ -1,4 +1,4 @@
-export const Status = ({ todos, incompleteTasksCount }) => {
+export const Status = ({ todos, completeTodosCount, incompleteTodosCount }) => {
   return (
     <>
       <div className="bg-[#f8f9fa] p-4 rounded-lg shadow-[0_2px_10px_rgba(0,0,0,0.05)] flex justify-between mb-6">
@@ -9,13 +9,13 @@ export const Status = ({ todos, incompleteTasksCount }) => {
         <p className="text-sm text-[#555] m-0">
           完了：
           <span className="font-bold text-[#2c3e50] ml-1">
-            {todos.length - incompleteTasksCount}
+            {completeTodosCount}
           </span>
         </p>
         <p className="text-sm text-[#555] m-0">
           未完了：
           <span className="font-bold text-[#2c3e50] ml-1">
-            {incompleteTasksCount}
+            {incompleteTodosCount}
           </span>
         </p>
       </div>

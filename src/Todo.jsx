@@ -1,12 +1,25 @@
-import { useState } from "react";
 import { Add } from "./components/Add";
 import { Status } from "./components/Status";
 import { List } from "./components/List";
+import { useTodos } from "./hooks/todo";
 
 export const Todo = () => {
-  const [todos, setTodos] = useState([]);
+  const {
+    todos,
+    completeTodosCount,
+    incompleteTodosCount,
+    addInputText,
+    editInputText,
+    onChangeAddInputText,
+    onChangeEditInputText,
+    handleToggleIsComplete,
+    handleAddTodo,
+    handleToggleIsEditing,
+    handleUpdateTodo,
+    handleDeleteTodo,
+  } = useTodos();
 
-  const [incompleteTasksCount, setIncompleteTasksCount] = useState(0);
+  console.log(addInputText);
 
   return (
     <>
@@ -16,17 +29,25 @@ export const Todo = () => {
             ToDo リスト
           </h1>
           <Add
-            todos={todos}
-            setTodos={setTodos}
-            setIncompleteTasksCount={setIncompleteTasksCount}
+            addInputText={addInputText}
+            onChangeAddInputText={onChangeAddInputText}
+            handleAddTodo={handleAddTodo}
           />
-          <Status todos={todos} incompleteTasksCount={incompleteTasksCount} />
+          <Status
+            todos={todos}
+            completeTodosCount={completeTodosCount}
+            incompleteTodosCount={incompleteTodosCount}
+          />
         </div>
         <div className="overflow-y-auto flex-grow">
           <List
             todos={todos}
-            setTodos={setTodos}
-            setIncompleteTasksCount={setIncompleteTasksCount}
+            handleToggleIsEditing={handleToggleIsEditing}
+            handleUpdateTodo={handleUpdateTodo}
+            handleDeleteTodo={handleDeleteTodo}
+            editInputText={editInputText}
+            onChangeEditInputText={onChangeEditInputText}
+            handleToggleIsComplete={handleToggleIsComplete}
           />
         </div>
       </div>

@@ -1,81 +1,12 @@
-import "../index.css";
-import { useState } from "react";
-
-export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
-  const [inputEditTodoText, setEditTodoInputText] = useState("");
-
-  const onChangeEditTodoFormInputText = (e) => {
-    setEditTodoInputText(e.target.value);
-  };
-
-  const onChangeIsComplete = (e, id) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          isComplete: e.target.checked,
-        };
-      } else {
-        return todo;
-      }
-    });
-
-    if (e.target.checked) {
-      setIncompleteTasksCount((prev) => prev - 1);
-    } else {
-      setIncompleteTasksCount((prev) => prev + 1);
-    }
-    setTodos(newTodos);
-  };
-
-  const editTodo = (id) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          isEditing: true,
-        };
-      } else {
-        if (todo.isEditing === true) {
-          return {
-            ...todo,
-            isEditing: false,
-          };
-        } else {
-          return {
-            ...todo,
-          };
-        }
-      }
-    });
-    setTodos(newTodos);
-  };
-
-  const updateTodo = (id) => {
-    const newTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        return {
-          ...todo,
-          text: inputEditTodoText || todo.text,
-          isEditing: false,
-        };
-      } else {
-        return todo;
-      }
-    });
-    setTodos(newTodos);
-  };
-
-  const deleteTodo = (id) => {
-    const canBeDeleted = confirm("本当に削除してよろしいですか？");
-    if (!canBeDeleted) return;
-    const targetTodo = todos.find((todo) => todo.id === id);
-    if (targetTodo.isComplete === false) {
-      setIncompleteTasksCount((prev) => prev - 1);
-    }
-    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
-  };
-
+export const List = ({
+  todos,
+  handleToggleIsEditing,
+  handleUpdateTodo,
+  handleDeleteTodo,
+  editInputText,
+  onChangeEditInputText,
+  handleToggleIsComplete,
+}) => {
   return (
     <>
       {todos.map((todo) => {
@@ -91,12 +22,12 @@ export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
                     <input
                       id="todo"
                       type="text"
-                      defaultValue={todo.text ?? inputEditTodoText}
-                      onChange={onChangeEditTodoFormInputText}
+                      defaultValue={todo.text ?? editInputText}
+                      onChange={onChangeEditInputText}
                       className="flex-grow px-2 mr-2 border border-[#ced4da] rounded h-9 text-base"
                     />
                     <button
-                      onClick={() => updateTodo(todo.id)}
+                      onClick={() => handleUpdateTodo(todo.id)}
                       className="px-3 py-2 border-none rounded cursor-pointer text-sm transition-all duration-300 bg-[#28a745] text-white h-9 hover:bg-[#218838]"
                     >
                       保存
@@ -110,7 +41,7 @@ export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
                       id="todo"
                       type="checkbox"
                       checked={todo.isComplete}
-                      onChange={(e, id) => onChangeIsComplete(e, todo.id)}
+                      onChange={(e) => handleToggleIsComplete(e, todo.id)}
                       className="mr-3 w-[18px] h-[18px] cursor-pointer shrink-0"
                     />
                     <label
@@ -120,13 +51,13 @@ export const List = ({ todos, setTodos, setIncompleteTasksCount }) => {
                       {todo.text}
                     </label>
                     <button
-                      onClick={() => editTodo(todo.id)}
+                      onClick={() => handleToggleIsEditing(todo.id)}
                       className="px-3 py-2 border-none rounded cursor-pointer text-sm transition-all duration-300 bg-[#ffc107] text-[#333] right-[70px] hover:bg-[#e0a800]"
                     >
                       編集
                     </button>
                     <button
-                      onClick={() => deleteTodo(todo.id)}
+                      onClick={() => handleDeleteTodo(todo.id)}
                       className="px-3 py-2 border-none rounded cursor-pointer text-sm transition-all duration-300 bg-[#dc3545] text-white hover:bg-[#c82333] ml-2"
                     >
                       削除
