@@ -19,8 +19,6 @@ export const Todo = () => {
     handleDeleteTodo,
   } = useTodos();
 
-  console.log(addInputText);
-
   return (
     <>
       <div className="bg-white p-8 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.1)] w-full max-w-[500px] h-[80vh] flex flex-col">
